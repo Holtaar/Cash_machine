@@ -1,88 +1,91 @@
 package com.company;
+
 import java.util.Scanner;
 
 
 public class Main {
+    static int password;
+    static int option;
+    static int account = 0;
+    static int trials = 4;
+
+
+    public static void displayMenu() {
+        System.out.println("What you want to do?");
+        System.out.println("1 - Withdrawal cash");
+        System.out.println("2 - Deposit cash");
+        System.out.println("3 - Check account status");
+        System.out.println("4 - Shut down");
+    }
+
+    public static void withdrawal(int withdrawalCash) {
+        if (account < 0 && withdrawalCash > 0) {
+            account -= withdrawalCash;
+            System.out.println("Your account status after deposit is: " + account);
+        }
+        System.out.println("You don't have that cash on your account !\n");
+    }
+
+    public static void deposit(int paymentCash) {
+        account += paymentCash;
+        System.out.println("Your account status after deposit is: " + account + "\n");
+    }
+
+    public static void accountBalance() {
+        System.out.println("Your account status is: " + account + "\n");
+    }
+
+    public static void exit() {
+        System.out.println("System will shut down!");
+        System.exit(0);
+    }
 
     public static void main(String[] args) {
 
         System.out.println("Podaj kod pin:");
         Scanner scanner = new Scanner(System.in);
+        boolean isApplicationRuning =true;
 
-        int pin;
-        int konto = 0;
-        int proby = 3;
-        while (proby >= 0) {
+        while (trials >= 0) {
 
+            password = scanner.nextInt();
 
-            pin = scanner.nextInt();
-
-            if (pin == 3671 ) {
-                while (true) {
-
-
-                    System.out.println("Pin poprawny!");
-
-                    System.out.println("Co chcesz zrobic?");
-                    System.out.println("1. Wybierz gotówkę");
-                    System.out.println("2. Sprawdz stan konta");
-                    System.out.println("3. Wpłać gotówkę");
-                    System.out.println("4. Przerwij operacje");
-                    int opcja = 4;
-                    opcja = scanner.nextInt();
-                    switch (opcja) {
+            if (password == 3671) {
+                while (isApplicationRuning) {
+                    displayMenu();
+                    option = scanner.nextInt();
+                    switch (option) {
                         case 1:
-                            System.out.println("Ile chcesz wybrac?");
-                            int wybieranieGotowki = scanner.nextInt();
-                            if (wybieranieGotowki > 0 && konto > 0) {
-                                konto = konto - wybieranieGotowki;
-                                System.out.println("Stan Twojego konta to: " + konto);
-                                break;
-                            } else {
-                                System.out.println("Nie masz wystarczającej ilości srodków");
-                                break;
-                            }
+                            System.out.println("How much you want to withdrawal ? ");
+                            int moneyMinus = scanner.nextInt();
+                            withdrawal(moneyMinus);
+                            break;
                         case 2:
-                            System.out.println("Stan Twojego konta to " + konto + " zł.");
+                            System.out.println("How much you want to deposit?");
+                            int moneyPlus = scanner.nextInt();
+                            deposit(moneyPlus);
                             break;
                         case 3:
-                            System.out.println("Podaj kwotę jaką chcesz wpłacić");
-                            int dodawanieGotowki = scanner.nextInt();
-                            if (dodawanieGotowki > 0) {
-                                int kontoPoWplacie = dodawanieGotowki + konto;
-                                System.out.println("Twoje konto po wplacie wynosi " + kontoPoWplacie + " zł.");
-                                konto = kontoPoWplacie;
-                                break;
-                            } else {
-                                System.out.println("Wprowadziles zle dane!");
-                            }
-                        case 4:
-                            System.out.println("Następuje wylogowanie!");
-                            System.exit(0);
+                            accountBalance();
                             break;
-
-                        default:
-                            System.out.println("Nie ma takiej opcji!");
+                        case 4:
+                            exit();
+                            break;
+                        default: {
+                            System.out.println("Invalid choice!");
+                            break;
+                        }
                     }
                 }
-
-
             } else {
-
-                if (proby > 0) {
-                    System.out.println("Pin niepopoprawny! Pozostało " + proby + " próby");
-                    proby--;
+                trials--;
+                if (trials > 0) {
+                    System.out.println("Wrong password, you have only " + trials + " attempts left!");
                 } else {
-
-                    System.out.println("Karta zablokowana, następuje wylgowane!");
-                    System.exit(0);
+                    System.out.println("\nThe card has been blocked!");
+                    exit();
                 }
-
-
             }
-
         }
-
-
     }
 }
